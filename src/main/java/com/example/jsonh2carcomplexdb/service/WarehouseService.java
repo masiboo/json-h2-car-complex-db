@@ -3,6 +3,7 @@ package com.example.jsonh2carcomplexdb.service;
 
 
 import com.example.jsonh2carcomplexdb.model.Car;
+import com.example.jsonh2carcomplexdb.model.Location;
 import com.example.jsonh2carcomplexdb.model.Vehicle;
 import com.example.jsonh2carcomplexdb.model.Warehouse;
 import com.example.jsonh2carcomplexdb.repository.WarehouseRepository;
@@ -45,6 +46,8 @@ public class WarehouseService {
     public Warehouse saveWareHouse(Warehouse warehouse) {
         Car car = warehouse.getCars();
         car.setWarehouse(warehouse);
+        Location location = warehouse.getLocation();
+        location.setWarehouse(warehouse);
         List<Vehicle> vehicles  = car.getVehicles();
         vehicles.forEach( vehicle -> {
             vehicle.setCar(car);
