@@ -25,6 +25,8 @@ public class JsonDataLoader implements CommandLineRunner {
     private final ARepository aRepository;
     private final BRepository bRepository;
     ObjectMapper mapper;
+    private A a;
+    private B b;
 
     public JsonDataLoader(WarehouseService warehouseService, ARepository aRepository, BRepository bRepository) {
         this.warehouseService = warehouseService;
@@ -43,8 +45,8 @@ public class JsonDataLoader implements CommandLineRunner {
 
     public List<Warehouse> sortByDate(List<Warehouse> warehouses) {
         for (Warehouse warehouse : warehouses) {
-            var vehicles = sort(warehouse.getCars().getVehicles());
-            warehouse.getCars().setVehicles(vehicles);
+            var vehicles = sort(warehouse.getCar().getVehicles());
+            warehouse.getCar().setVehicles(vehicles);
         }
         return warehouses;
     }
@@ -62,28 +64,35 @@ public class JsonDataLoader implements CommandLineRunner {
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
     }
 
-    public void makeInsertAB(){
-        A a = new A();
-        a.setName("A-Name");
-        a.setAddress("A-Address");
-
+    public void insertAB(){
         B b = new B();
         b.setName("B-Name");
         b.setAddress("B-Address");
 
+        A a = new A();
+        a.setName("A-Name");
+        a.setAddress("A-Address");
         a.setB(b);
         b.setA(a);
-
         aRepository.save(a);
-        bRepository.save(b);
+    }
 
+    public void getAB(){
+       var aa =  aRepository.getById(a.getAId());
+       var bb = aa.getB();
+       bb.setAddress("new address of B");
+       bRepository.save(bb);
+        System.out.printf("Stop");
     }
 
     @Override
     public void run(String... args) throws Exception {
         warehouseService.deleteAll();
+       // aRepository.deleteAll();
+       // bRepository.deleteAll();
         var warehouse = getWarehouse();
         warehouse.forEach(item -> warehouseService.saveWareHouse(item));
-        makeInsertAB();
+        insertAB();
+       // getAB();
     }
 }

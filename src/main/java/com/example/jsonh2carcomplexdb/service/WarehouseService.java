@@ -26,7 +26,7 @@ public class WarehouseService {
         this.warehouseRepository = warehouseRepository;
     }
 
-    public Page<Warehouse> buildPageable(List<Warehouse> warehouses, Pageable pageable) {
+    public Page<Warehouse> buildWarehousePageable(List<Warehouse> warehouses, Pageable pageable) {
         int total = warehouses.size();
         int start = toIntExact(pageable.getOffset());
         int end = Math.min((start + pageable.getPageSize()), total);
@@ -35,16 +35,35 @@ public class WarehouseService {
             returnWarehouseList = warehouses.subList(start, end);
         }
         return new PageImpl<>(returnWarehouseList, pageable, total);
+    }
 
+    public Page<Car> buildCarPageable(List<Car> cars, Pageable pageable) {
+        int total = cars.size();
+        int start = toIntExact(pageable.getOffset());
+        int end = Math.min((start + pageable.getPageSize()), total);
+        List<Car> returnCarList = new ArrayList<>();
+        if (start <= end) {
+            returnCarList = cars.subList(start, end);
+        }
+        return new PageImpl<>(returnCarList, pageable, total);
     }
 
 
     public List<Warehouse> getAllWareHouses() {
         return warehouseRepository.findAll();
     }
+    
+    public Car getCarById(int carId){
+        var filteredWarehouse = warehouseRepository.findAll().stream()
+                .filter(warehouse -> warehouse.getCar().getId() == carId )
+                .findAny()
+                .orElse(null);
+        var car = filteredWarehouse.getCar();
+        return car;
+    }
 
     public Warehouse saveWareHouse(Warehouse warehouse) {
-        Car car = warehouse.getCars();
+        Car car = warehouse.getCar();
         car.setWarehouse(warehouse);
         Location location = warehouse.getLocation();
         location.setWarehouse(warehouse);

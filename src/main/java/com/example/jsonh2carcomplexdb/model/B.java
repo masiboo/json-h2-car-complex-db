@@ -5,31 +5,35 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@Entity
-@Table(name = "b")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
-public class B {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    String name;
-    String address;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "a_id", referencedColumnName = "id")
-    A a;
-}
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @ToString
+    @Entity
+    public class B {
+        @Id
+        @GeneratedValue
+        @Column(name = "b_id_PK")
+        private long bId;
+        private String name;
+        private String address;
+        @JoinColumn(name = "a_id", referencedColumnName = "aId")
+        @OneToOne(mappedBy = "b", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+        A a;
+    }

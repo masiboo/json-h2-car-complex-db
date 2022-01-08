@@ -33,5 +33,5 @@ public class Warehouse {
     Location location;
     @JsonProperty("cars")
     @OneToOne(mappedBy = "warehouse", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    Car cars;
+    Car car;
 }
