@@ -3,6 +3,7 @@ package com.example.jsonh2carcomplexdb.init;
 
 import com.example.jsonh2carcomplexdb.model.A;
 import com.example.jsonh2carcomplexdb.model.B;
+import com.example.jsonh2carcomplexdb.model.C;
 import com.example.jsonh2carcomplexdb.model.Vehicle;
 import com.example.jsonh2carcomplexdb.model.Warehouse;
 import com.example.jsonh2carcomplexdb.model.WarehousesData;
@@ -64,17 +65,29 @@ public class JsonDataLoader implements CommandLineRunner {
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
     }
 
-    public void insertAB(){
+    public void insertABC(){
+
         B b = new B();
         b.setName("B-Name");
         b.setAddress("B-Address");
+
+        List<C> cList = List.of(new C("c-name", "c-address"),new C( "c-name2", "c-address2"),
+                new C( "c-name3", "c-address3"));
+
+      //  cList.forEach(item -> item.setB(b));
+
 
         A a = new A();
         a.setName("A-Name");
         a.setAddress("A-Address");
         a.setB(b);
-        b.setA(a);
         aRepository.save(a);
+
+        cList.forEach(item -> item.setB(b));
+        b.setCBatch(cList);
+        aRepository.save(a);
+
+
     }
 
     public void getAB(){
@@ -92,7 +105,7 @@ public class JsonDataLoader implements CommandLineRunner {
        // bRepository.deleteAll();
         var warehouse = getWarehouse();
         warehouse.forEach(item -> warehouseService.saveWareHouse(item));
-        insertAB();
+        insertABC();
        // getAB();
     }
 }

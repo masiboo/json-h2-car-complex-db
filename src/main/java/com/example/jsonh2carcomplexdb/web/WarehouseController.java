@@ -1,9 +1,11 @@
 package com.example.jsonh2carcomplexdb.web;
 
 
+import com.example.jsonh2carcomplexdb.model.A;
 import com.example.jsonh2carcomplexdb.model.B;
 import com.example.jsonh2carcomplexdb.model.Car;
 import com.example.jsonh2carcomplexdb.model.Warehouse;
+import com.example.jsonh2carcomplexdb.repository.ARepository;
 import com.example.jsonh2carcomplexdb.repository.BRepository;
 import com.example.jsonh2carcomplexdb.service.WarehouseService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +26,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(path = WarehouseController.REQUEST_URL)
 public class WarehouseController {
@@ -36,6 +42,9 @@ public class WarehouseController {
 
     @Autowired
     public BRepository bRepository;
+
+    @Autowired
+    public ARepository aRepository;
 
     public WarehouseController(WarehouseService warehouseService) {
         this.warehouseService = warehouseService;
@@ -108,6 +117,13 @@ public class WarehouseController {
        var b =  bRepository.findById(id).get();
        return b;
     }
+
+    @GetMapping(value = "/geta/{id}")
+    public List<A> getA(@PathVariable long id){
+        var a =  aRepository.findById(id).get();
+        return List.of( a);
+    }
+
 
     @PostMapping(value = "/save")
     public Warehouse saveWarehouse(@RequestBody Warehouse warehouse){

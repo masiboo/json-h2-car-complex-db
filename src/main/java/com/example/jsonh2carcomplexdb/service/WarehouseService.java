@@ -71,6 +71,7 @@ public class WarehouseService {
         vehicles.forEach( vehicle -> {
             vehicle.setCar(car);
         });
+        car.setVehicles(vehicles);
         return warehouseRepository.save(warehouse);
     }
 
