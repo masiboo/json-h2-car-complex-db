@@ -113,15 +113,24 @@ public class WarehouseController {
     }
 
     @GetMapping(value = "/getb/{id}")
-    public B getB(@PathVariable long id){
-       var b =  bRepository.findById(id).get();
-       return b;
+    public List<B> getB(@PathVariable long id){
+       var b =  bRepository.findById(id);
+       if(b.isPresent()){
+           return List.of(b.get());
+       }else{
+           return null;
+       }
     }
 
     @GetMapping(value = "/geta/{id}")
     public List<A> getA(@PathVariable long id){
-        var a =  aRepository.findById(id).get();
-        return List.of( a);
+        var a =  aRepository.findById(id);
+        if(a.isPresent()){
+            //System.out.println(a.get());
+            return List.of( a.get());
+        }else{
+            return null;
+        }
     }
 
 

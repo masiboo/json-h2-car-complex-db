@@ -27,11 +27,12 @@ import javax.persistence.Table;
 public class A {
    @Id
    @GeneratedValue
+   @Column(name = "a_id_PK")
    private long aId;
     String name;
     String address;
     @JsonManagedReference // this for parent to avoid infinite recursion
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "b_id_FK")
+    @JoinColumn(name = "b_id_FK") // B table foreign key in A table
     B b;
 }

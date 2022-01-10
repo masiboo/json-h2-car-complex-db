@@ -33,7 +33,7 @@ public class C {
     private String address;
     @NotNull
     @JsonBackReference // this for child to avoid infinite recursion
-    @JoinColumn(name = "bId")
+    @JoinColumn(name = "b_id_FK") // B table foreign key in C table
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private B b;

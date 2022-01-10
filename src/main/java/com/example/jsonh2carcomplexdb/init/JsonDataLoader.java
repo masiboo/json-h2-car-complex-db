@@ -74,13 +74,12 @@ public class JsonDataLoader implements CommandLineRunner {
         List<C> cList = List.of(new C("c-name", "c-address"),new C( "c-name2", "c-address2"),
                 new C( "c-name3", "c-address3"));
 
-      //  cList.forEach(item -> item.setB(b));
-
 
         A a = new A();
         a.setName("A-Name");
         a.setAddress("A-Address");
         a.setB(b);
+        b.setA(a);
         aRepository.save(a);
 
         cList.forEach(item -> item.setB(b));
